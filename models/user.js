@@ -1,12 +1,19 @@
 const mongoose = require('mongoose'); 
  
 const userSchema = new mongoose.Schema({ 
-  name: { type: String, required: true, minlength: 2, maxlength: 255 }, 
-  description: { type: String, required: true }, 
-  category: { type: String, required: true, minlength: 5, maxlength: 50 },  
-  dateModified: { type: Date, default: Date.now }, 
-});
+  username: { type: String, required: true, minlength: 3, maxlength: 20, unique: true }, 
+  email: { type: String, required: true, max: 50, unique: true }, 
+  password: { type: String, required: true, minlength: 6 },  
+  profilePicture: { type: String, default:'' },
+  coverPicture: { type: String, default:'' },
+  followers: { type: Array, default:[] },
+  following: { type: Array, default:[] },
+  isAdmin: { type: Boolean, default: false },
+},
+ { timestamps: true }, 
 
-const User = mongoose.model('User', userSchema); 
+);
+
+const User = mongoose.model('user', userSchema); 
 
 module.exports = User;

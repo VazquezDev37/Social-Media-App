@@ -4,7 +4,7 @@ const router = express.Router();
  
 // All endpoints and route handlers go here 
 
-router.post('/', async (req, res) => { 
+router.get('/', async (req, res) => { 
     try { 
    
       // Need to validate body before continuing 
