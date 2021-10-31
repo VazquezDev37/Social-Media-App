@@ -2,7 +2,7 @@ const connectDB = require('./startup/db');
 const express = require('express'); 
 const app = express();
 const users = require('./routes/users');
-const auth = require('./models/auth'); 
+const auth = require('./routes/auth'); 
  
 connectDB(); 
  

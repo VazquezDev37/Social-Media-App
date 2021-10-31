@@ -1,5 +1,7 @@
+
 const router = require('express').Router();
-const { user, validate } = require('../models/user');
+const { User, validate } = require('../models/user');
+
 
 
 //Register
@@ -20,7 +22,7 @@ router.get('/register', async (req,res) => {
     
         await user.save();
 
-        return res.send(user); 
+        return res.send(User); 
     } catch (ex) { 
       return res.status(500).send(`Internal Server Error: ${ex}`); 
     } 
