@@ -1,11 +1,12 @@
 const {User, validateUser} = require('../models/user');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcrypt');
+const auth = require('../routes/auth'); 
 const express = require('express'); 
 const router = express.Router(); 
  
 // All endpoints and route handlers go here 
 
-router.post('/', async (req, res) => { 
+router.post('/', [auth], async (req, res) => { 
   try { 
     const { error } = validateUser(req.body); 
     if (error) return res.status(400).send(error.details[0].message); 

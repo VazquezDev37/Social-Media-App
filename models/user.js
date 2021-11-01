@@ -1,4 +1,5 @@
-const mongoose = require('mongoose'); 
+const mongoose = require('mongoose');
+const Joi = require('joi'); 
  
 const userSchema = new mongoose.Schema({ 
   username: { type: String, required: true, minlength: 3, maxlength: 20, unique: true }, 
@@ -14,6 +15,21 @@ const userSchema = new mongoose.Schema({
 
 );
 
-const User = mongoose.model('user', userSchema); 
+userSchema.methods.generateAuthToken = function () { 
+  return jwt.sign({ _id: this._id, name: this.name, isAdmin: this.Admin }, config.get('jwtSecret')); 
+};
 
+const User = mongoose.model('User', userSchema);
+
+function validateUser(user) { 
+  const schema = Joi.object({ 
+    name: Joi.string().min(5).max(50).required(),
+     email: Joi.string().min(5).max(255).required().email(),
+     password: Joi.string().min(5).max(1024).required(),
+  }); 
+  return schema.validate(user); 
+} 
+
+exports.validate = validateUser;
+exports.userSchema = userSchema;
 module.exports = User;
