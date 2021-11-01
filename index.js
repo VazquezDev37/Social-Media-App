@@ -8,6 +8,7 @@ const auth = require('./routes/auth');
 connectDB(); 
  
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 
