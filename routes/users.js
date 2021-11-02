@@ -1,4 +1,4 @@
-const {User, validateUser} = require('../models/user');
+const {User, validate} = require('../models/user');
 const bcrypt = require('bcrypt');
 const auth = require('../routes/auth'); 
 const express = require('express'); 
@@ -43,11 +43,20 @@ router.post('/', async (req, res) => {
  );
  return res.header('x-auth-token',token)
            .header('access-control-expose-headers','x-auth-token')
-           .send({ _id:user._id, name: user.name, email: user.email }); }
- catch (ex) {
- return res.status(500).send(`Internal Server Error: ${ex}`); }
+           .send({ _id:user._id, name: user.name, email: user.email }); 
+          }catch (ex) {
+  return res.status(500).send(`Internal Server Error: ${ex}`); }
  });
 
+ router.delete('/:id', async (req,res) => {
+  try{
+      const user = await User.findByIdAndRemove(req.params.id);
+      if(!user)
+      return res.status (400).send(`The product with id “${id.params.id}” does not exist`)
+      return res.send(user)
+  } catch (ex) {
+      return res.status(500).send(`Internal Server Error:${ex}`);
+      }
+});
 
- 
 module.exports = router;

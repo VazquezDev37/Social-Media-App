@@ -1,4 +1,4 @@
-const { App, validate } = require('../../models/app'); 
+const { Post, validate } = require('../models/post'); 
 const express = require('express'); 
 const router = express.Router(); 
  
@@ -12,15 +12,15 @@ router.post('/', async (req, res) => {
    
       // Need to validate body before continuing 
        
-      const app = new App({ 
+      const post = new Post({ 
         name: req.body.name, 
         description: req.body.description, 
         category: req.body.category,  
       }); 
    
-      await app.save(); 
+      await post.save(); 
    
-      return res.send(app); 
+      return res.send(post); 
     } catch (ex) { 
       return res.status(500).send(`Internal Server Error: ${ex}`); 
     } 
