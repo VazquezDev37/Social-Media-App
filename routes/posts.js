@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
       // Need to validate body before continuing 
        
       const post = new Post({ 
-        name: req.body.name, 
+        username: req.body.name, 
         description: req.body.description, 
         category: req.body.category,  
       }); 
