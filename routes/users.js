@@ -67,4 +67,57 @@ router.post('/register', async (req, res) => {
       }
 });
 
+//  CREATEPOST
+router.post('/status/new.',async(req,res) => {
+  try{
+        const newStatus = new Status ({
+          text:req.body.text,
+        });
+        await newStatus.save();
+        return res.send(newStatus);
+    }catch(ex) {
+        return res.status(500).send(`Internal Server Error:${ex}`);
+    }
+});
+
+//DELETE A POST
+router.delete('/delete/:id', async (req, res) => {
+try {
+  const newStatus = await Status.findById(req.params.id);
+  if (!newStatus)
+  return res.status (400).send(`The post with id “${req.params.id}” does not exist`)
+    await newStatus.deleteOne();
+    return res.send('your status has been updated')
+} catch (ex) {
+  return res.status(500).send(`Internal Server Error:${ex}`);
+}
+});
+
+
+//  CREATEPOST
+router.post('/status/new',async(req,res) => {
+  try{
+        const newStatus = new Status ({
+          text:req.body.text,
+        });
+        await newStatus.save();
+        return res.send(newStatus);
+    }catch(ex) {
+        return res.status(500).send(`Internal Server Error:${ex}`);
+    }
+});
+
+//DELETE A POST
+router.delete('/delete/:id', async (req, res) => {
+try {
+  const newStatus = await Status.findById(req.params.id);
+  if (!newStatus)
+  return res.status (400).send(`The post with id “${req.params.id}” does not exist`)
+    await newStatus.deleteOne();
+    return res.send('your status has been updated')
+} catch (ex) {
+  return res.status(500).send(`Internal Server Error:${ex}`);
+}
+});
+
 module.exports = router;
