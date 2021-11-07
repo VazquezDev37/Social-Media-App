@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
     
     }
 
-  //register User
+  //Register User
 router.post('/register', async (req, res) => {
   try {
  const { error } = validate(req.body);
@@ -118,6 +118,38 @@ try {
 } catch (ex) {
   return res.status(500).send(`Internal Server Error:${ex}`);
 }
+});
+
+// SEE LIST OF FRIEND REQUEST
+router.get('/view/:requesteeId', async (req, res) => {
+  try {
+      const requestList = await Request.find({ requesteeId:req.params.requesteeId });
+      return res.send(requestList)
+  }catch (ex) {
+      return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+  //SEND FRIEND REQUEST
+  router.post('/request', async (req,res) => {
+      try{
+          const friendRequest =  new Request  ({
+              requesterId:req.body.requesterId,
+              requesteeId: req.body.requesteeId,
+          });
+        await friendRequest.save();
+        return res.send(friendRequest);
+      }catch (ex) {
+          return res.status(500).send(`Internal Server Error:${ex}`);
+      }
+  });
+  //GET POST TIMELINE
+router.get('/view/:email', async (req, res) => {
+  try {
+    const userStatus = await Status.find({ email:req.params.email });
+    return res.send(userStatus)
+  }catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
 });
 
 module.exports = router;

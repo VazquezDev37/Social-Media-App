@@ -3,56 +3,54 @@ const config = require('config');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
+//SCHEMA FOR REGISTERING NEW USER
 const userSchema = new mongoose.Schema({ 
   username: { type: String, required: true, minlength: 3, maxlength: 20 }, 
   email: { type: String, required: true, max: 50, unique: true }, 
   password: { type: String, required: true, minlength: 6 },  
-  profilePicture: { type: String, default:'' },
-  coverPicture: { type: String, default:'' },
   followers: { type: Array, default:[] },
-  isAdmin: { type: Boolean, default: false },
 },
  { timestamps: true }, 
 
 );
 
+//JSONWEBTOKEN METHOD FOR USER SCHEMA
 userSchema.methods.generateAuthToken = function () { 
   return jwt.sign({ _id: this._id, username: this.username, isAdmin: this.Admin }, config.get('jwtSecret')); 
 };
 
 // convert the userSchema to a  custom mongoose model
-const User = mongoose.model('User', userSchema );
+// SCHEMA FOR USER FRIENDS
+// const friendSchema = new mongoose.Schema({
+//     name: {type: String, required: true, minlength:5, maxlength:50 },
+// });
 
-
-function validateUser(User) { 
-  const schema = Joi.object({ 
-    username: Joi.string().min(5).max(50).required(),
-     email: Joi.string().min(5).max(255).required().email(),
-     password: Joi.string().min(5).max(1024).required(),
-  });
-  
-  const userSchema = new mongoose.Schema({
-    name: {type: String, required: true, minlength:5, maxlength:50 },
-    email: {type: String,required:true, minlength:5, maxlength:225},
-    password: {type: String,required:true, minlength:10, maxlength:225},
-    // friends:{ type: [friendSchema], default:[]},
-    });
-    
-//jsonwebtoken method t genrate webtoken
-userSchema.methods.generateAuthToken = function() {
-    return jwt.sign({ _id: this._id, name: this.name }, config.get('jwtSecret'))
-};
-
+// SCHEMA FOR NEW POST
 const statusSchema = new mongoose.Schema({
-    text:{type:String, required: true,minlength:2,maxlength:150},
-    email:{type:String,required: true,minlength:2,maxlength:150},
+  text:{type:String, required: true,minlength:2,maxlength:150},
+  email:{type:String,required: true,minlength:2,maxlength:150},
 });
 
-const Status = mongoose.model('Status',statusSchema);
+// SCHEMA FOR NEW FRIEND REQUEST
+const requestSchema = new mongoose.Schema({
+  requesterId:{type:String, required:true, minlength:2,maxlength:150},
+  requesteeId:{type:String, required:true, minlength:2,maxlength:150},
+})
 
-  //Validation
-  return schema.validate(User); 
-} 
+// CONVERT SCHEMA TO MONGOOSE MODEL
+const User = mongoose.model('User', userSchema );
+const Status = mongoose.model('Status',statusSchema);
+const Request = mongoose.model('Request',requestSchema);
+
+//VALIDATION
+function validateUser(User)
+  {const schema = Joi.object({
+  name: Joi.string().min(5).max(50).required(),
+  email: Joi.string().min(5).max(225).required(),
+  password: Joi.string().min(10).max(225).required(),
+});
+return schema.validate(User);
+}
 
 function validateLogin(req) {
   const schema = Joi.object({
@@ -61,6 +59,11 @@ function validateLogin(req) {
  });
   return schema.validate(req); }
 
-exports.User = User
-exports.validate = validateUser;
-exports.userSchema = userSchema;
+
+module.exports = {
+  Request,
+  Status,
+  User,
+  validateUser,
+  validateLogin
+} 
