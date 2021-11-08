@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, minlength: 3, maxlength: 20 }, 
   email: { type: String, required: true, max: 50, unique: true }, 
   password: { type: String, required: true, minlength: 6 },  
-  followers: { type: Array, default:[] },
+
 },
  { timestamps: true }, 
 
@@ -45,7 +45,7 @@ const Request = mongoose.model('Request',requestSchema);
 //VALIDATION
 function validateUser(User)
   {const schema = Joi.object({
-  name: Joi.string().min(5).max(50).required(),
+  username: Joi.string().min(5).max(50).required(),
   email: Joi.string().min(5).max(225).required(),
   password: Joi.string().min(10).max(225).required(),
 });
